@@ -264,14 +264,7 @@ Pour toute question ou problème :
 - ✅ Workflow de traitement
 - ✅ Catégorisation
 
-## 🎯 Roadmap
 
-- [ ] Notifications par email automatiques
-- [ ] Intégration avec outils externes (Slack, Teams)
-- [ ] Rapports PDF personnalisables
-- [ ] Application mobile
-- [ ] Intelligence artificielle pour catégorisation automatique
-- [ ] Chatbot de support
 
 ---
 
