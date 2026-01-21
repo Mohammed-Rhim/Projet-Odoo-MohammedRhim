@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Liste Incidents -->
+    <record id="view_incident_tree" model="ir.ui.view">
+        <field name="name">incident.management.tree</field>
+        <field name="model">incident.management</field>
+        <field name="arch" type="xml">
+            <tree string="Incidents" decoration-danger="sla_violated" decoration-info="state=='new'" 
+                  decoration-success="state=='done'" decoration-muted="state=='closed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="category_id"/>
+                <field name="team_id"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" decoration-success="state=='done'" 
+                       decoration-info="state=='new'" decoration-warning="state=='pending'"/>
+                <field name="deadline"/>
+                <field name="sla_violated" invisible="1"/>
+                <field name="color" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue Formulaire Incidents -->
+    <record id="view_incident_form" model="ir.ui.view">
+        <field name="name">incident.management.form</field>
+        <field name="model">incident.management</field>
+        <field name="arch" type="xml">
+            <form string="Incident">
+                <header>
+                    <button name="action_progress" string="Démarrer" type="object" 
+                            class="oe_highlight" invisible="state != 'new'"/>
+                    <button name="action_pending" string="Mettre en attente" type="object" 
+                            invisible="state not in ['new', 'progress']"/>
+                    <button name="action_done" string="Résoudre" type="object" 
+                            class="oe_highlight" invisible="state not in ['progress', 'pending']"/>
+                    <button name="action_close" string="Fermer" type="object" 
+                            invisible="state != 'done'"/>
+                    <button name="action_create_knowledge_article" string="Créer Article KB" 
+                            type="object" class="btn-secondary" 
+                            invisible="state not in ['done', 'closed']"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="new,progress,pending,done,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <widget name="web_ribbon" title="SLA Dépassé" bg_color="bg-danger" invisible="not sla_violated"/>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <label for="title"/>
+                        <h2>
+                            <field name="title" placeholder="Titre de l'incident"/>
+                        </h2>
+                    </div>
+
+                    <group>
+                        <group string="Informations Générales">
+                            <field name="category_id" options="{'no_create': True}"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="partner_id" string="Demandeur"/>
+                        </group>
+                        <group string="Affectation">
+                            <field name="team_id" options="{'no_create': True}"/>
+                            <field name="available_user_ids" invisible="1"/>
+                            <field name="user_id" options="{'no_create': True}" 
+                                   domain="[('id', 'in', available_user_ids)]"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="SLA">
+                            <field name="sla_policy_id" readonly="1"/>
+                            <field name="deadline" readonly="1"/>
+                            <field name="sla_violated" readonly="1"/>
+                            <field name="resolution_date" readonly="1" 
+                                   invisible="not resolution_date"/>
+                            <field name="time_to_resolve" readonly="1" 
+                                   invisible="not time_to_resolve"/>
+                        </group>
+                        <group string="Évaluation Client" invisible="state not in ['done', 'closed']">
+                            <field name="customer_rating" widget="priority"/>
+                            <field name="customer_feedback"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Décrivez le problème en détail..."/>
+                        </page>
+                        <page string="Solution" name="solution">
+                            <field name="solution" widget="html" 
+                                   placeholder="Documentez la solution apportée..."/>
+                        </page>
+                        <page string="Base de Connaissances" name="knowledge">
+                            <field name="knowledge_article_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                    <field name="view_count"/>
+                                    <field name="helpful_count"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Kanban Incidents -->
+    <record id="view_incident_kanban" model="ir.ui.view">
+        <field name="name">incident.management.kanban</field>
+        <field name="model">incident.management</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="priority"/>
+                <field name="user_id"/>
+                <field name="color"/>
+                <field name="sla_violated"/>
+                <field name="deadline"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/> - <field name="title"/>
+                                        </strong>
+                                    </div>
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="category_id"/>
+                                    <t t-if="record.sla_violated.raw_value">
+                                        <span class="badge badge-danger">SLA Dépassé</span>
+                                    </t>
+                                    <t t-if="record.deadline.raw_value">
+                                        <div><i class="fa fa-clock-o"/> <field name="deadline"/></div>
+                                    </t>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="user_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Vue Recherche Incidents -->
+    <record id="view_incident_search" model="ir.ui.view">
+        <field name="name">incident.management.search</field>
+        <field name="model">incident.management</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher Incidents">
+                <field name="name" string="Référence"/>
+                <field name="title" string="Titre"/>
+                <field name="category_id" string="Catégorie"/>
+                <field name="team_id" string="Équipe"/>
+                <field name="user_id" string="Assigné à"/>
+                
+                <filter string="Mes Incidents" name="my_incidents" 
+                        domain="[('user_id', '=', uid)]"/>
+                <filter string="Non Assignés" name="unassigned" 
+                        domain="[('user_id', '=', False)]"/>
+                <separator/>
+                <filter string="Nouveaux" name="new" 
+                        domain="[('state', '=', 'new')]"/>
+                <filter string="En Cours" name="in_progress" 
+                        domain="[('state', '=', 'progress')]"/>
+                <filter string="En Attente" name="pending" 
+                        domain="[('state', '=', 'pending')]"/>
+                <filter string="Résolus" name="resolved" 
+                        domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter string="SLA Dépassé" name="sla_violated" 
+                        domain="[('sla_violated', '=', True)]"/>
+                <filter string="Critiques" name="critical" 
+                        domain="[('priority', '=', '3')]"/>
+                <filter string="Haute Priorité" name="high" 
+                        domain="[('priority', '=', '2')]"/>
+                
+                <group expand="0" string="Grouper par">
+                    <filter string="État" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Priorité" name="group_by_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="Catégorie" name="group_by_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Équipe" name="group_by_team" context="{'group_by': 'team_id'}"/>
+                    <filter string="Assigné à" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action Incidents -->
+    <record id="action_incident" model="ir.actions.act_window">
+        <field name="name">Incidents</field>
+        <field name="res_model">incident.management</field>
+        <field name="view_mode">kanban,tree,form,graph,pivot</field>
+        <field name="context">{'search_default_my_incidents': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un nouvel incident
+            </p>
+            <p>
+                Suivez et gérez tous vos incidents IT en un seul endroit.
+            </p>
+        </field>
+    </record>
+</odoo>

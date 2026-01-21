@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_incident_user,incident utilisateur,model_incident_management,base.group_user,1,1,1,0
+access_incident_admin,incident administrateur,model_incident_management,base.group_system,1,1,1,1
+access_category_user,catégorie utilisateur,model_incident_category,base.group_user,1,0,0,0
+access_category_admin,catégorie administrateur,model_incident_category,base.group_system,1,1,1,1
+access_sla_user,sla utilisateur,model_incident_sla,base.group_user,1,0,0,0
+access_sla_admin,sla administrateur,model_incident_sla,base.group_system,1,1,1,1
+access_team_user,équipe utilisateur,model_incident_team,base.group_user,1,0,0,0
+access_team_admin,équipe administrateur,model_incident_team,base.group_system,1,1,1,1
+access_knowledge_user,knowledge utilisateur,model_incident_knowledge,base.group_user,1,1,1,0
+access_knowledge_admin,knowledge administrateur,model_incident_knowledge,base.group_system,1,1,1,1
+access_knowledge_tag_user,knowledge tag utilisateur,model_incident_knowledge_tag,base.group_user,1,0,0,0
+access_knowledge_tag_admin,knowledge tag administrateur,model_incident_knowledge_tag,base.group_system,1,1,1,1
+access_incident_portal,incident portal,model_incident_management,base.group_portal,1,0,1,0
+access_knowledge_portal,knowledge portal,model_incident_knowledge,base.group_portal,1,0,0,0
+access_category_portal,catégorie portal,model_incident_category,base.group_portal,1,0,0,0

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Principal -->
+    <menuitem id="menu_incident_root" name="Gestion des Incidents" sequence="10"/>
+
+    <!-- Tableau de Bord -->
+    <menuitem id="menu_dashboard" 
+              name="Tableau de Bord" 
+              parent="menu_incident_root" 
+              action="action_dashboard" 
+              sequence="1"/>
+
+    <!-- Analyse -->
+    <menuitem id="menu_analysis" 
+              name="Analyse" 
+              parent="menu_incident_root" 
+              action="action_incident_analysis" 
+              sequence="2"/>
+
+    <!-- Incidents -->
+    <menuitem id="menu_incident"
+              name="Incidents"
+              parent="menu_incident_root"
+              action="action_incident"
+              sequence="10"/>
+
+    <!-- Base de Connaissances -->
+    <menuitem id="menu_knowledge_root"
+              name="Base de Connaissances"
+              parent="menu_incident_root"
+              sequence="20"/>
+
+    <menuitem id="menu_knowledge"
+              name="Articles"
+              parent="menu_knowledge_root"
+              action="action_knowledge"
+              sequence="1"/>
+
+    <menuitem id="menu_knowledge_tag"
+              name="Tags"
+              parent="menu_knowledge_root"
+              action="action_knowledge_tag"
+              sequence="2"/>
+
+    <!-- Équipes -->
+    <menuitem id="menu_team"
+              name="Équipes"
+              parent="menu_incident_root"
+              action="action_team"
+              sequence="30"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_config_root"
+              name="Configuration"
+              parent="menu_incident_root"
+              sequence="100"/>
+
+    <menuitem id="menu_category"
+              name="Catégories"
+              parent="menu_config_root"
+              action="action_category"
+              sequence="1"/>
+
+    <menuitem id="menu_sla"
+              name="Politiques SLA"
+              parent="menu_config_root"
+              action="action_sla"
+              sequence="2"/>
+</odoo>

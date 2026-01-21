@@ -1,0 +1,270 @@
+.o_incident_dashboard {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.o_incident_dashboard h1 {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    animation: fadeInDown 0.8s ease-in-out;
+}
+
+/* Cartes KPI animées */
+.o_dashboard_kpi_card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.o_dashboard_kpi_card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.o_dashboard_kpi_card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* Badges de priorité animés */
+.badge-critical {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px rgba(245, 87, 108, 0.5);
+}
+
+.badge-high {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.badge-medium {
+    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+}
+
+.badge-low {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+/* Animation pulse pour éléments critiques */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Animation fadeIn */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Indicateur SLA */
+.o_sla_indicator {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.o_sla_ok {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+.o_sla_warning {
+    background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+    color: white;
+}
+
+.o_sla_violated {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+/* Cartes Kanban améliorées */
+.o_kanban_record {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.o_kanban_record:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.o_kanban_record.oe_kanban_color_1 {
+    border-left-color: #f5576c;
+}
+
+.o_kanban_record.oe_kanban_color_3 {
+    border-left-color: #fa709a;
+}
+
+.o_kanban_record.oe_kanban_color_9 {
+    border-left-color: #f093fb;
+}
+
+/* Statistiques avec icônes */
+.o_stat_info {
+    position: relative;
+}
+
+.o_stat_info::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+/* Boutons d'action améliorés */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Graphiques avec bordures colorées */
+.o_graph_container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: white;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+/* Chatter amélioré */
+.o_chatter {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+/* Liste avec hover effect */
+.o_list_view tbody tr:hover {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    transition: all 0.2s ease;
+}
+
+/* Badges d'état */
+.badge-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.badge-info {
+    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+}
+
+.badge-warning {
+    background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+}
+
+.badge-danger {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+}
+
+/* Animation de chargement */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.o_form_view {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Ribbon SLA */
+.o_web_ribbon {
+    animation: slideInRight 0.5s ease-in-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Progress bars pour SLA */
+.o_sla_progress {
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.o_sla_progress_bar {
+    height: 100%;
+    background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+    transition: width 0.5s ease;
+    border-radius: 10px;
+}
+
+.o_sla_progress_bar.warning {
+    background: linear-gradient(90deg, #f2994a 0%, #f2c94c 100%);
+}
+
+.o_sla_progress_bar.danger {
+    background: linear-gradient(90deg, #eb3349 0%, #f45c43 100%);
+}
+
+/* Tooltips personnalisés */
+.o_field_widget[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}

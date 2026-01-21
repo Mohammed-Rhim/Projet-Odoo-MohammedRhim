@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_incidents" name="Portal layout : incidents menu entries" inherit_id="portal.portal_breadcrumbs" priority="30">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'incident'" t-attf-class="breadcrumb-item #{'active ' if not incident else ''}">
+                <a t-if="incident" t-attf-href="/my/incidents?{{ keep_query() }}">Mes Incidents</a>
+                <t t-else="">Mes Incidents</t>
+            </li>
+            <li t-if="incident" class="breadcrumb-item active">
+                <t t-esc="incident.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_incidents" name="Mes Incidents" customize_show="True" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Incidents</t>
+                <t t-set="url" t-value="'/my/incidents'"/>
+                <t t-set="placeholder_count" t-value="'incident_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_incidents" name="Mes Incidents">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Incidents</t>
+            </t>
+            <t t-if="not incidents">
+                <div class="alert alert-warning mt-3" role="alert">
+                    Aucun incident trouvé.
+                </div>
+            </t>
+            <t t-if="incidents" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Référence</th>
+                        <th>Titre</th>
+                        <th>Catégorie</th>
+                        <th>Priorité</th>
+                        <th>État</th>
+                        <th>Date de création</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="incidents" t-as="incident">
+                        <tr>
+                            <td><a t-attf-href="/my/incidents/#{incident.id}"><t t-esc="incident.name"/></a></td>
+                            <td><t t-esc="incident.title"/></td>
+                            <td><t t-esc="incident.category_id.name"/></td>
+                            <td>
+                                <t t-if="incident.priority == '3'">
+                                    <span class="badge badge-danger">Critique</span>
+                                </t>
+                                <t t-elif="incident.priority == '2'">
+                                    <span class="badge badge-warning">Haute</span>
+                                </t>
+                                <t t-elif="incident.priority == '1'">
+                                    <span class="badge badge-info">Moyenne</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge badge-secondary">Basse</span>
+                                </t>
+                            </td>
+                            <td>
+                                <t t-if="incident.state == 'new'">
+                                    <span class="badge badge-info">Nouveau</span>
+                                </t>
+                                <t t-elif="incident.state == 'progress'">
+                                    <span class="badge badge-primary">En cours</span>
+                                </t>
+                                <t t-elif="incident.state == 'pending'">
+                                    <span class="badge badge-warning">En attente</span>
+                                </t>
+                                <t t-elif="incident.state == 'done'">
+                                    <span class="badge badge-success">Résolu</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge badge-secondary">Fermé</span>
+                                </t>
+                            </td>
+                            <td><span t-field="incident.create_date" t-options='{"widget": "date"}'/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_incident" name="Détail Incident">
+        <t t-call="portal.portal_layout">
+            <t t-set="o_portal_fullwidth_alert" groups="base.group_portal">
+                <t t-call="portal.portal_back_in_edit_mode">
+                    <t t-set="backend_url" t-value="'/web#model=incident.management&amp;id=%s&amp;action=%s&amp;view_type=form' % (incident.id, incident.env.ref('incident_management.action_incident').id)"/>
+                </t>
+            </t>
+
+            <div id="optional_placeholder"></div>
+            <div class="container">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>
+                                    <span t-field="incident.name"/> - <span t-field="incident.title"/>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Catégorie:</strong> <span t-field="incident.category_id"/>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Priorité:</strong>
+                                <t t-if="incident.priority == '3'">
+                                    <span class="badge badge-danger">Critique</span>
+                                </t>
+                                <t t-elif="incident.priority == '2'">
+                                    <span class="badge badge-warning">Haute</span>
+                                </t>
+                                <t t-elif="incident.priority == '1'">
+                                    <span class="badge badge-info">Moyenne</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge badge-secondary">Basse</span>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>État:</strong>
+                                <t t-if="incident.state == 'new'">
+                                    <span class="badge badge-info">Nouveau</span>
+                                </t>
+                                <t t-elif="incident.state == 'progress'">
+                                    <span class="badge badge-primary">En cours</span>
+                                </t>
+                                <t t-elif="incident.state == 'pending'">
+                                    <span class="badge badge-warning">En attente</span>
+                                </t>
+                                <t t-elif="incident.state == 'done'">
+                                    <span class="badge badge-success">Résolu</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge badge-secondary">Fermé</span>
+                                </t>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Assigné à:</strong> <span t-field="incident.user_id"/>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong>Description:</strong>
+                                <p t-field="incident.description"/>
+                            </div>
+                        </div>
+                        <div class="row mb-3" t-if="incident.solution and incident.state in ['done', 'closed']">
+                            <div class="col-12">
+                                <strong>Solution:</strong>
+                                <div t-field="incident.solution"/>
+                            </div>
+                        </div>
+                        <div class="row mb-3" t-if="incident.state in ['done', 'closed'] and not incident.customer_rating">
+                            <div class="col-12">
+                                <h5>Évaluer la résolution</h5>
+                                <form method="POST" t-attf-action="/my/incidents/#{incident.id}/rate">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="form-group">
+                                        <label>Note:</label>
+                                        <select name="rating" class="form-control" required="1">
+                                            <option value="">Choisir une note</option>
+                                            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                            <option value="4">⭐⭐⭐⭐ Très bien</option>
+                                            <option value="3">⭐⭐⭐ Bien</option>
+                                            <option value="2">⭐⭐ Moyen</option>
+                                            <option value="1">⭐ Mauvais</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Commentaire:</label>
+                                        <textarea name="feedback" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Envoyer l'évaluation</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mb-3" t-if="incident.customer_rating">
+                            <div class="col-12">
+                                <strong>Votre évaluation:</strong> <span t-field="incident.customer_rating"/>
+                                <p t-if="incident.customer_feedback" t-field="incident.customer_feedback"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Historique</h5>
+                    </div>
+                    <div class="card-body">
+                        <t t-call="portal.message_thread">
+                            <t t-set="object" t-value="incident"/>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

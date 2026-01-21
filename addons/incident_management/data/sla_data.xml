@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Politiques SLA par défaut -->
+        <record id="sla_critical" model="incident.sla">
+            <field name="name">SLA Critique</field>
+            <field name="priority">3</field>
+            <field name="deadline_hours">4</field>
+            <field name="description">Les incidents critiques doivent être résolus en 4 heures maximum</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="sla_high" model="incident.sla">
+            <field name="name">SLA Haute Priorité</field>
+            <field name="priority">2</field>
+            <field name="deadline_hours">24</field>
+            <field name="description">Les incidents de haute priorité doivent être résolus en 24 heures</field>
+            <field name="color">3</field>
+        </record>
+
+        <record id="sla_medium" model="incident.sla">
+            <field name="name">SLA Priorité Moyenne</field>
+            <field name="priority">1</field>
+            <field name="deadline_hours">72</field>
+            <field name="description">Les incidents de priorité moyenne doivent être résolus en 3 jours</field>
+            <field name="color">5</field>
+        </record>
+
+        <record id="sla_low" model="incident.sla">
+            <field name="name">SLA Basse Priorité</field>
+            <field name="priority">0</field>
+            <field name="deadline_hours">168</field>
+            <field name="description">Les incidents de basse priorité doivent être résolus en 1 semaine</field>
+            <field name="color">7</field>
+        </record>
+    </data>
+</odoo>
